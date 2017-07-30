@@ -26,6 +26,10 @@ shinyUI(fluidPage(
           condition = "input.config_mode == 'example'",
           selectInput("config_example", label = "Choose example config", 
                     choices = c("none", "javascript", "r"))
+        ),
+        radioButtons("node_shape", "Node shape", 
+                     choiceNames = c("box (no scaling)", "circle (scaled by difficulty)"),
+                     choiceValues = c("box", "dot")
         )
       ),
       

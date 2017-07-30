@@ -51,7 +51,7 @@ shinyServer(function(input, output) {
     
     # Build nodes data frame from exercise data
     nodes <- config$exercises %>% 
-      rename(id = slug) %>% 
+      rename(id = slug, value = difficulty) %>% 
       mutate(label = id,
              group = case_when(
                deprecated ~ "deprecated",
@@ -61,7 +61,7 @@ shinyServer(function(input, output) {
              ),
              title = topics,
              topics = sapply(config$exercises$topics, paste0, collapse = ",")) %>% 
-      select(id, label, group, title, topics)
+      select(id, label, group, title, topics, value)
     
     # Get names for core exercises (used to create edges between core exercises)
     core_exercises <- nodes %>% 
@@ -82,7 +82,7 @@ shinyServer(function(input, output) {
     # Create network visualization
     visNetwork(nodes, edges, 
         main = paste0("Track config for ", config$language)) %>% 
-      visNodes(shape = "box") %>% 
+      visNodes(shape = input$node_shape) %>% 
       visEdges(smooth = FALSE, arrows = "to", width = 2) %>% 
       visOptions(highlightNearest = list(enabled = T, degree = 1)) %>%
       visOptions(selectedBy = list(variable = "topics", multiple = T)) %>%
